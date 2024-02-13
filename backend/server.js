@@ -6,6 +6,7 @@ const main = require("./routes/user");
 const login = require("./routes/login");
 const mongoose = require("mongoose");
 const session = require("express-session")
+const morgan = require("morgan");
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -13,10 +14,11 @@ app.use(cors({ origin: "*" }));
 app.get("/", (req, res) => {
   res.send("<h1>Hi Docker! 🐳</h1>");
 });
-
+app.use
 app.set('trust proxy', 1)
 app.use(session({secret:"somerandomkeylol1234",store:false,resave:false,cookie:{maxAge:60000}}))
 
+app.use(morgan("dev"))
 app.use("/home", main);
 app.use("/user",login);   
 
