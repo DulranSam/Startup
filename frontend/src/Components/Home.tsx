@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useContext, useState} from "react";
+import {  useState} from "react";
 import { LineWave } from "react-loader-spinner";
-import {userData} from "../App"
+// import {userData} from "../App"
 import Axios from "axios";
 import Exception from "./Exception/Exception";
 
 
+
 const HomePage = () => {
-  const {loading,setLoading} = useContext<any>(userData);
+  // const {loading,setLoading} = useContext<any>(userData);
   const  [logged,setLogged] = useState<boolean>(true); //we need to change implementation here!
 
   let searchCounter = 0;
@@ -17,11 +18,12 @@ const HomePage = () => {
   const baseURL = "http://localhost:8000/home";
   const [story,setStory] = useState("")
   const [data, setData] = useState<string[]>([]);
+  const [loading,setLoading] = useState<boolean>(false)
 
   async function fetchData(e:Event){
     e.preventDefault();
     try{
-      // setLoading(true);
+      setLoading(true);
       const response = await Axios.post(baseURL,story)
       if(response.status===200){
         setData(response.data)
@@ -35,7 +37,7 @@ const HomePage = () => {
     }catch(err){
       console.error(err);
     }finally{
-      // setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -54,8 +56,9 @@ const HomePage = () => {
           ))}
         </ul>
       ) : (
-        <h1>{searchCounter === 0 ?"Generate your free e-book now!" : "No results found!"}</h1>
+        <h1>{searchCounter === 0 ?"Generate your free e-book now!" : "No results found , please try again!"}</h1>
       )}
+    
       {/**Validation Issue here! */}
     </div>
   ) : <Exception/>

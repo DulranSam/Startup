@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleAuth } from "../Firebase/fireconfig";
-import { useContext, useState } from "react";
-import { userData } from "../App";
+import {  useState } from "react";
+
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface LoginState {
   username: string;
@@ -12,13 +12,21 @@ interface LoginState {
   // Add other properties as needed
 }
 
+interface userCredential{
+  user:string,
+}
+
 const Login = () => {
-  const { user, setUser, setStatus, loading, setLoading } =
-    useContext<any>(userData);
+  // const { user, setUser, setStatus, loading, setLoading } =
+  //   useContext<any>(userData);
+  const navigator = useNavigate();
   const [login, setLogin] = useState<LoginState>({
     username: "",
     password: "",
   });
+  const [loading,setLoading] = useState<boolean>(false);
+  const [user,setUser] = useState("");
+  const [status,setStatus] = useState("")
   const handleLogin = async (e: Event) => {
     e.preventDefault();
     if (auth && auth.currentUser) {
@@ -26,7 +34,8 @@ const Login = () => {
         setLoading(true);
         const userCredential = await signInWithPopup(auth, googleAuth);
         setUser(userCredential.user);
-        alert(`${user.displayName} logged in!`);
+        alert(`${userCredential.user.displayName} logged in!`);
+        navigator("/")
       } catch (err) {
         console.error(err);
       } finally {
@@ -77,8 +86,10 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
       <Link to="/">Home!</Link >
+      <p>{status}</p>
+     
       </div>
-  
+   
       )}
     </div>
   );
