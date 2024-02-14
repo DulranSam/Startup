@@ -7,6 +7,8 @@ const login = require("./routes/login");
 const mongoose = require("mongoose");
 const session = require("express-session")
 const morgan = require("morgan");
+const gemini = require("./routes/gemini");
+const gptGenerate = require("./routes/gpt")
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -20,7 +22,9 @@ app.use(session({secret:"somerandomkeylol1234",store:false,resave:false,cookie:{
 
 app.use(morgan("dev"))
 app.use("/home", main);
-app.use("/user",login);   
+app.use("/user",login);  
+app.use("/gemini", gemini);
+app.use("/images", gptGenerate); //INCLUDED THIS JUST FOR FUN 
 
 
 async function connectDB(){

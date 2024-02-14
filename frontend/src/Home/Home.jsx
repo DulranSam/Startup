@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 // Home.js
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import PacmanLoader from 'react-spinners/PacmanLoader';
@@ -11,13 +12,14 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [story, setStory] = useState('');
+ 
   let sessionQueryCounter = 0;
 
   async function generateEbook(e) {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await Axios.post('http://localhost:8000/home', story);
+      const response = await Axios.get('https://yts.mx/api/v2/list_movies.json'); //http://localhost:8000/home//post//data
       if (response.status === 200) {
         setData(response.data);
         sessionQueryCounter++;
@@ -28,6 +30,8 @@ const Home = () => {
       setLoading(false);
     }
   }
+
+
 
   return (
     <div className="container">
@@ -56,14 +60,15 @@ const Home = () => {
                 <button type="submit" className="submit-btn">
                   Generate EBook!
                 </button>
+           
               </form>
             </div>
           )}
           <div className="books-container">
             {data && data.length ? (
-              data.map((x, index) => <Books key={x.id || index} data={x} />)
+              data.map((x, index) => <Books key={x.id || index} data={x} />,    )
             ) : sessionQueryCounter !== 0 ? (
-              <div>Wasn't able to generate Book! Please try again!</div>
+              <div>Wasnt able to generate Book! Please try again!</div>
             ) : (
               ''
             )}
