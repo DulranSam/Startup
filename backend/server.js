@@ -9,6 +9,8 @@ const session = require("express-session")
 const morgan = require("morgan");
 const gemini = require("./routes/gemini");
 const gptGenerate = require("./routes/gpt")
+const yt = require("./routes/yt");
+const taskModel = require("./routes/tasks")
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -24,12 +26,14 @@ app.use(morgan("dev"))
 app.use("/home", main);
 app.use("/user",login);  
 app.use("/gemini", gemini);
+app.use("/tasks",taskModel)
+app.use("/yts",yt)
 app.use("/images", gptGenerate); //INCLUDED THIS JUST FOR FUN 
 
 
 async function connectDB(){
   try{
-    await mongoose.connect(process.env.cluster,console.log(`Connected to Server!`))
+    await mongoose.connect(process.env.cluster,console.log(`Connected to Database!`))
   }catch(err){
     console.error(err);
   }

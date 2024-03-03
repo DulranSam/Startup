@@ -13,7 +13,7 @@ router.route("/login").post(async (req,res)=>{
     }else{
         const authorized = bcrypt.compareSync(password,existence.password)
         // req.session.user = {username};        
-        authorized ?  res.status(200).json({Alert:`${username} Logged In!`}) : res.status(401).json({Alert:"Unauthorized!"});
+        authorized ?  res.status(200).json({Alert:`${username} Logged In!`},{id:existence.id},{user:existence}) : res.status(401).json({Alert:"Unauthorized!"});
     }
 }) 
 

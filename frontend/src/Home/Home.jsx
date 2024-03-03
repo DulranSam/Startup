@@ -1,25 +1,24 @@
 /* eslint-disable no-unused-vars */
-// Home.js
-import  { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
-import PacmanLoader from 'react-spinners/PacmanLoader';
+import Axios from 'axios'; // Import PacmanLoader from Material-UI lab
+import { Typography, TextField, Button } from '@mui/material'; // Import Typography, TextField, Button from Material-UI core
 import Books from '../Books/Books';
 import './Home.css';
+import PlsLogin from '../PlsLogin';
+import { Bookbag } from '../App';
 
 const Home = () => {
-  const [logged, setLogged] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { logged, setLogged, loading, setLoading,user } = useContext(Bookbag);
   const [data, setData] = useState([]);
   const [story, setStory] = useState('');
- 
   let sessionQueryCounter = 0;
 
   async function generateEbook(e) {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await Axios.get('https://yts.mx/api/v2/list_movies.json'); //http://localhost:8000/home//post//data
+      const response = await Axios.get('');
       if (response.status === 200) {
         setData(response.data);
         sessionQueryCounter++;
@@ -31,44 +30,40 @@ const Home = () => {
     }
   }
 
-
-
   return (
-    <div className="container">
+    <div className="container" style={{padding:"5%"}}>
       {logged ? (
         <div>
           {loading ? (
-            <div className="loader">
-              <PacmanLoader color="yellow" />
-            </div>
+           "Loading..."
           ) : (
             <div>
-              <h1>
+              <h1>VeloBooks</h1>
+              <Typography variant="h4">
                 {sessionQueryCounter === 0
-                  ? "Hi Velo, Generate your favorite EBook Today 📔" //username needs to be dynamic based on real username!x
-                  : ''}
-              </h1>
+                  ? `Hi ${user.username}, Generate your favorite E-Book Today 📔`
+                  : 'Anything else?'}
+              </Typography>
               <form onSubmit={generateEbook} className="form-container">
-                <input
+                <TextField
                   onChange={(e) => {
                     setStory(e.target.value);
                   }}
-                  placeholder={sessionQueryCounter===0?"Enter Story to Generate 🌟" : "Perhaps, Generate Another Story?"}
+                  placeholder={sessionQueryCounter === 0 ? 'Enter Story to Generate 🌟' : 'Perhaps, Generate Another Story?'}
                   type="text"
                   className="input-field"
                 />
-                <button type="submit" className="submit-btn">
+                <Button type="submit" variant="contained" disabled={loading}>
                   Generate EBook!
-                </button>
-           
+                </Button>
               </form>
             </div>
           )}
           <div className="books-container">
             {data && data.length ? (
-              data.map((x, index) => <Books key={x.id || index} data={x} />,    )
+              data.map((x, index) => <Books key={x.id || index} data={x} />)
             ) : sessionQueryCounter !== 0 ? (
-              <div>Wasnt able to generate Book! Please try again!</div>
+              <Typography variant="body1">Wasnt able to generate Book! Please try again!</Typography>
             ) : (
               ''
             )}
@@ -76,9 +71,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <Link to="/login" className="login-link">
-            Click Here to Login!
-          </Link>
+          <PlsLogin />
         </div>
       )}
     </div>

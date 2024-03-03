@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+/* eslint-disable no-unused-vars */
+import  { useContext, useState } from 'react'
 import Axios from "axios";
 import { Link } from 'react-router-dom';
+import { Bookbag } from '../App';
 
 const Login = () => {
 
-    const [loading,setLoading] = useState(false)
-    const [user,setUser] = useState({username:"",password:""})
+const {loading,setLoading,user,setUser } = useContext(Bookbag)
+   
 
     async function userLogin(e){
         e.preventDefault();
